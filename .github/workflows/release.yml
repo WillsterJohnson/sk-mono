@@ -1,0 +1,72 @@
+# TODO: probably needs work to have this run correctly
+name: release
+
+on:
+  push:
+    tags:
+      - "*"
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Will this work?
+        run: echo "pfffttttt no clue!"
+
+      - name: Checkout
+        uses: actions/checkout@v3
+
+      - name: Get tag name
+        id: tag-name
+        run: |
+          echo "tag_name=$(git tag --sort version:refname | tail -n 1)" >> $GITHUB_OUTPUT
+          echo $tag_name
+
+      - name: Run tests
+        run: cargo test --verbose
+
+      - name: Build binaries
+        run: cargo build --release --verbose
+
+      # TODO: how hard is unzipping in-memory in install.js?
+      - name: Move and rename binaries
+        run: |
+          mkdir ./bin
+          cp ./target/x86_64-unknown-linux-gnu/release/sk-mono \
+            ../bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-linux-x86_64
+          cp ./target/x86_64-pc-windows-gnu/release/sk-mono.exe \
+            ../bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win64-x86_64.exe
+          cp ./target/i686-pc-windows-gnu/release/sk-mono.exe \
+            ../bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win32-i686.exe
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          VERSION: ${{ github.ref }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: ${{ github.ref }}
+          draft: false
+          prerelease: false
+
+      - name: Add files to release
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ./bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-linux-x86_64
+            ./bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win64-x86_64.exe
+            ./bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win32-i686.exe
+
+      - name: Install Node
+        uses: actions/setup-node@v3
+        with:
+          node-version: "16.x"
+          registry-url: "https://registry.npmjs.org"
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
