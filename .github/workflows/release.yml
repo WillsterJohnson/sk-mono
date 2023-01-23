@@ -38,11 +38,11 @@ jobs:
         run: |
           mkdir ./bin
           cp ./target/x86_64-unknown-linux-gnu/release/sk-mono \
-            ../bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-linux-x86_64
+            ./bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-linux-x86_64
           cp ./target/x86_64-pc-windows-gnu/release/sk-mono.exe \
-            ../bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win64-x86_64.exe
+            ./bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win64-x86_64.exe
           cp ./target/i686-pc-windows-gnu/release/sk-mono.exe \
-            ../bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win32-i686.exe
+            ./bin/sk-mono-${{ steps.tag-name.outputs.tag_name }}-win32-i686.exe
 
       - name: Create Release
         id: create_release
