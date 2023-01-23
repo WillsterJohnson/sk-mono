@@ -25,6 +25,7 @@ jobs:
 
       - name: Ensure targets
         run: |
+          sudo apt install build-essential
           rustup target add x86_64-unknown-linux-gnu
           rustup target add x86_64-pc-windows-gnu
           rustup target add i686-pc-windows-gnu
