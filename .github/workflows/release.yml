@@ -23,11 +23,12 @@ jobs:
           echo "tag_name=$(git tag --sort version:refname | tail -n 1)" >> $GITHUB_OUTPUT
           echo $tag_name
 
-      - name: Ensure targetd
+      - name: Ensure targets
         run: |
           rustup target add x86_64-unknown-linux-gnu
           rustup target add x86_64-pc-windows-gnu
           rustup target add i686-pc-windows-gnu
+
       - name: Run tests
         run: cargo test --verbose
 
