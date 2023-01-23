@@ -1,0 +1,20 @@
+[package]
+name = "sk-mono"
+version = "0.1.0"
+authors = ["Will 'Willster' Johnson"]
+description = "SvelteKit MonoRepos Made Easy"
+license = "GPL-3.0"
+readme = "./README.md"
+edition = "2021"
+homepage =  "https://github.com/WillsterJohnson/sk-mono#readme"
+repository = "https://github.com/WillsterJohnson/sk-mono.git"
+keywords = ["svelte", "sveltekit", "mono", "monorepo", "cli", "sk", "sk-mono"]
+categories = ["command-line-utilities","config","development-tools::build-utils","web-programming"]
+# TODO: any of these needed?
+# exclude = "" # Files to exclude when publishing.
+# include = "" # Files to include when publishing.
+# default-run = "" # The default binary to run by cargo run.
+
+[dependencies]
+clap = { version = "4.1.1", features = ["derive"] }
+
