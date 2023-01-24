@@ -6,10 +6,15 @@
   "license": "GPL-3.0",
   "bin": {
     "sk-mono": "./sk-mono",
-    "skmono": "./sk-mono"
+    "skmono": "./sk-mono",
+    "skm": "./sk-mono"
   },
   "scripts": {
-    "preinstall": "NODE_NO_WARNINGS=1 node install.js"
+    "preinstall": "NODE_NO_WARNINGS=1 node install.js --experimental-fetch"
+  },
+  "engines": {
+    "": "really >=18, but fetch experimental is available in 17",
+    "node": ">=17"
   },
   "keywords": [
     "svelte",
