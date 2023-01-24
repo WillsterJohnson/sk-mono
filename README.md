@@ -5,15 +5,35 @@
 
 SvelteKit monorepos made easy.
 
+<!-- LINKS -->
+
+<!-- max 5 wide, td should be emboldened for visual consistency -->
+<!-- leave as few blank cells as possible. eg; 5 urls -> 1x5, 6 urls -> 2x3, etc -->
+
+| [Installation] | [Usage] | [License] | [Contributing] |
+|----------------|---------|-----------|----------------|
+
+[Installation]: #installation
+[Usage]: #usage
+[License]: #license
+[Contributing]: #contributing
+
+<!-- /LINKS -->
+
 ## What is this?
 
 Currently it's *nothing*!
 
+sk-mono is going to be a fully featured command line utility for making,
+managing, running, building, and deploying SvelteKit libraries and applications
+from monorepos and single-workspace repos alike, using Rust for lightning fast
+execution times.
+
 Work in progress, check back later.
 
-## Install
+## Installation
 
-[View it on NPM](https://www.npmjs.com/package/sk-mono)
+*[View sk-mono on npmjs.com](https://www.npmjs.com/package/sk-mono)*
 
 You can install sk-mono with your favorite Node package manager:
 
@@ -23,41 +43,30 @@ pnpm add --save-dev sk-mono
 yarn add --dev sk-mono
 ```
 
-~~Or you may install it from [crates.io](https://crates.io/crates/sk-mono) with
-[Cargo](https://www.rust-lang.org/learn/get-started):~~ *Not yet, use NPM for now.*
+## Usage
+
+Once installed, sk-mono can be run with the `sk-mono` command:
 
 ```sh
-# cargo install sk-mono
+sk-mono --version
 ```
 
-## Building from source
-
-*See the [license](./LICENSE.txt) for distribution permissions.*
-
-You can build sk-mono from source with [Cargo](https://www.rust-lang.org/learn/get-started):
+Hyphens are a pain though, so sk-mono has two builtin aliases:
 
 ```sh
-git clone https://github.com/WillsterJohnson/sk-mono ./sk-mono
-cd sk-mono
-cargo build --release
+skmono --version
+skm --version
 ```
 
-Be aware that sk-mono will build for Linux, Windows 32 bit, and Windows 64 bit
-by default.
+## Contributing
 
-If you want to change the target platforms, you can do so with the `--target`
-flag:
+**Important: sk-mono is written almost entirely in Rust. Aside from a short
+install script, there is no JavaScript here.**
 
-```sh
-cargo build --release --target x86_64-unknown-linux-gnu # linux
-cargo build --release --target x86_64-pc-windows-gnu    # windows 64 bit
-cargo build --release --target i686-pc-windows-gnu      # windows 32 bit
-cargo build --release --target x86_64-apple-darwin      # older macos
-cargo build --release --target aarch64-apple-darwin     # newer macos
-```
+Currently sk-mono is not currently accepting code contributions.
 
-You can also remove the `build.target` key from `.cargo/config.toml` to build
-for your current platform.
+If you have found a bug, have an idea for a feature, or think there's a better
+way to do something, please open an issue.
 
 ## License
 
