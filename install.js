@@ -3,7 +3,7 @@ const fs = require("node:fs");
 const os = require("node:os");
 const path = require("node:path");
 main();
-function main() {
+async function main() {
   const binPath = path.join(__dirname, "sk-mono");
   if (!shouldUpdate(binPath)) process.exit(0);
   const platform = getPlatform();
@@ -11,19 +11,16 @@ function main() {
   const binExt = platform.startsWith("win") ? ".exe" : "";
   const binName = `sk-mono-${version}-${platform}${binExt}`;
   const binUrl = `https://github.com/WillsterJohnson/sk-mono/releases/download/${version}/${binName}`;
-  writeExecutable(binUrl, binPath);
+  await writeExecutable(binUrl, binPath);
 }
 function shouldUpdate(target) {
   if (!fs.existsSync(target)) return true;
   return false;
 }
-function writeExecutable(source, target) {
-  const FsWs = fs.createWriteStream(target, { mode: 0o755 });
-  const realWs = new WritableStream({
-    write: (d) => FsWs.write(d),
-    close: () => FsWs.end(),
-  });
-  fetch(source).then((res) => res.body.pipeTo(realWs));
+async function writeExecutable(source, target) {
+  const response = await fetch(source);
+  const buffer = Buffer.from(await response.arrayBuffer());
+  fs.writeFileSync(target, buffer, { mode: 0o755 });
 }
 function getPlatform() {
   const type = os.type();
