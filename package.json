@@ -4,11 +4,13 @@
   "author": "Will 'Willster' Johnson",
   "description": "SvelteKit MonoRepos Made Easy",
   "license": "GPL-3.0",
+  "type": "module",
   "bin": {
     "sk-mono": "./sk-mono",
     "skmono": "./sk-mono",
     "skm": "./sk-mono"
   },
+  "main": "lib.js",
   "scripts": {
     "preinstall": "NODE_NO_WARNINGS=1 node install.js --experimental-fetch"
   },
@@ -39,5 +41,11 @@
   "bugs": {
     "url": "https://github.com/WillsterJohnson/sk-mono/issues"
   },
-  "homepage": "https://github.com/WillsterJohnson/sk-mono#readme"
+  "homepage": "https://github.com/WillsterJohnson/sk-mono#readme",
+  "dependencies": {
+    "ffi-napi": "^4.0.3"
+  },
+  "devDependencies": {
+    "@types/ffi-napi": "^4.0.7"
+  }
 }
