@@ -1,3 +1,6 @@
 *
 !CHANGELOG.md
-!install.js
+!scripts/checkUpdate.js
+!scripts/install.js
+!scripts/lib.js
+!scripts/lib.d.ts
