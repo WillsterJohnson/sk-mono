@@ -9,5 +9,4 @@ pub extern "C" fn fibonacci(n: isize) -> isize {
     return fibonacci(n - 1) + fibonacci(n - 2);
 }
 
-#[no_mangle]
-pub extern "C" fn temp() {}
+// TODO: see /scripts/checkUpdate.js

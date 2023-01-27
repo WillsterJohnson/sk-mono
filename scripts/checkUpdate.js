@@ -1,3 +1,4 @@
+// TODO: migrate to /src/lib.rs and call via FFI
 import pkg from "../package.json" assert { type: "json" };
 
 export const { version: currentTag } = pkg;

@@ -1,8 +1,10 @@
 import { Library } from "ffi-napi";
+import path from "node:path";
+import url from "node:url";
 
 /** @type {import("./lib").SkMono} */
 export const skMono = Library(
-  "./target/x86_64-unknown-linux-gnu/debug/libsk_mono.so",
+  path.join(url.fileURLToPath(path.dirname(import.meta.url)), "..", "lib"),
   {
     fibonacci: ["int", ["int"]],
   },

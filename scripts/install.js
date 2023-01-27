@@ -17,8 +17,8 @@ async function main() {
     url.fileURLToPath(path.dirname(import.meta.url)),
     "..",
   );
-  const fTar = path.join(fRoot, "tar", "sk-mono.tar.gz");
   fs.mkdirSync(path.join(fRoot, "tar"), { recursive: true });
+  const fTar = path.join(fRoot, "tar", "sk-mono.tar.gz");
 
   const response = await getTar();
 
@@ -30,6 +30,8 @@ async function main() {
 
   normaliseFiles(files, "sk-mono", fRoot);
   normaliseFiles(files, "lib", fRoot);
+
+  fs.rmSync(path.join(fRoot, "tar"), { recursive: true });
 }
 function normaliseFiles(files, name, root) {
   const fLib = files.find((file) => file.startsWith(name));
