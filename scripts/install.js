@@ -4,12 +4,7 @@ import path from "node:path";
 import url from "node:url";
 import tar from "tar";
 import { checkForUpdate, currentTag } from "./checkUpdate.js";
-
-const { name } = JSON.parse(
-  fs.readFileSync(path.join(process.cwd(), "package.json"), "utf-8"),
-);
-if (name !== "sk-mono") main();
-
+main();
 async function main() {
   await checkForUpdate();
 
@@ -18,13 +13,13 @@ async function main() {
     "..",
   );
   fs.mkdirSync(path.join(fRoot, "tar"), { recursive: true });
-  const fTar = path.join(fRoot, "tar", "sk-mono.tar.gz");
+  const fTar = path.join(fRoot, "tar", "bundle.tar.gz");
 
   const response = await getTar();
 
-  writeTarball(fTar, response.body);
+  await writeTarball(fTar, response.body);
 
-  tar.extract({ cwd: path.join(fRoot, "tar"), file: fTar });
+  await tar.extract({ cwd: path.join(fRoot, "tar"), file: fTar });
 
   const files = fs.readdirSync(path.join(fRoot, "tar"));
 
@@ -35,16 +30,17 @@ async function main() {
 }
 function normaliseFiles(files, name, root) {
   const fLib = files.find((file) => file.startsWith(name));
+  console.log(fLib);
   fs.cpSync(path.join(root, "tar", fLib), path.join(root, name));
   fs.chmodSync(path.join(root, name), 0o755);
 }
-function writeTarball(target, source) {
+async function writeTarball(target, source) {
   const fsWrite = fs.createWriteStream(target);
   const nodeWrite = new WritableStream({
     write: (chunk) => void fsWrite.write(chunk),
     close: () => void fsWrite.end(),
   });
-  source.pipeTo(nodeWrite);
+  await source.pipeTo(nodeWrite);
 }
 async function getTar() {
   const platform = getPlatform();
