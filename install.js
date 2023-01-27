@@ -1,26 +1,56 @@
-// @ts-nocheck
-const fs = require("node:fs");
-const os = require("node:os");
-const path = require("node:path");
-main();
+import fs from "node:fs";
+import os from "node:os";
+import path from "node:path";
+import url from "node:url";
+import tar from "tar";
+import { checkForUpdate, currentTag } from "./checkUpdate.js";
+
+const { name } = JSON.parse(
+  fs.readFileSync(path.join(process.cwd(), "package.json"), "utf-8"),
+);
+if (name !== "sk-mono") main();
+
 async function main() {
-  const binPath = path.join(__dirname, "sk-mono");
-  if (!shouldUpdate(binPath)) process.exit(0);
+  await checkForUpdate();
+
+  const fRoot = url.fileURLToPath(path.dirname(import.meta.url));
+  const fTar = path.join(fRoot, "/tar/sk-mono.tar.gz");
+  fs.mkdirSync(path.join(fRoot, "tar"), { recursive: true });
+
+  const response = await getTar();
+
+  writeTarball(fTar, response.body);
+
+  tar.extract({ cwd: fRoot + "/tar", file: fTar });
+
+  const files = fs.readdirSync(path.join(fRoot, "tar"));
+
+  normaliseFiles(files, "sk-mono", fRoot);
+  normaliseFiles(files, "lib", fRoot);
+}
+function normaliseFiles(files, name, root) {
+  const fLib = files.find((file) => file.startsWith(name));
+  fs.cpSync(path.join(root, "tar", fLib), path.join(root, name));
+  fs.chmodSync(path.join(root, name), 0o755);
+}
+function writeTarball(target, source) {
+  const fsWrite = fs.createWriteStream(target);
+  const nodeWrite = new WritableStream({
+    write: (chunk) => void fsWrite.write(chunk),
+    close: () => void fsWrite.end(),
+  });
+  source.pipeTo(nodeWrite);
+}
+async function getTar() {
   const platform = getPlatform();
-  const version = require("./package.json").version;
-  const binExt = platform.startsWith("win") ? ".exe" : "";
-  const binName = `sk-mono-${version}-${platform}${binExt}`;
-  const binUrl = `https://github.com/WillsterJohnson/sk-mono/releases/download/${version}/${binName}`;
-  await writeExecutable(binUrl, binPath);
-}
-function shouldUpdate(target) {
-  if (!fs.existsSync(target)) return true;
-  return false;
-}
-async function writeExecutable(source, target) {
-  const response = await fetch(source);
-  const buffer = Buffer.from(await response.arrayBuffer());
-  fs.writeFileSync(target, buffer, { mode: 0o755 });
+  const tarName = `sk-mono-${currentTag}-${platform}.tar.gz`;
+  const tarUrl = `https://github.com/WillsterJohnson/sk-mono/releases/download/${currentTag}/${tarName}`;
+  const response = await fetch(tarUrl);
+  if (!response.ok)
+    throw new Error(
+      `sk-mono failed to update: could not download ${tarUrl} (${response.status} : ${response.statusText})`,
+    );
+  return response;
 }
 function getPlatform() {
   const type = os.type();

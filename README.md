@@ -61,7 +61,7 @@ skm --version
 ## Contributing
 
 **Important: sk-mono is written almost entirely in Rust. Aside from a short
-install script, there is no JavaScript here.**
+install script, there is very little JavaScript here.**
 
 Currently sk-mono is not currently accepting code contributions.
 

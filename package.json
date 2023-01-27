@@ -43,9 +43,11 @@
   },
   "homepage": "https://github.com/WillsterJohnson/sk-mono#readme",
   "dependencies": {
-    "ffi-napi": "^4.0.3"
+    "ffi-napi": "^4.0.3",
+    "tar": "^6.1.13"
   },
   "devDependencies": {
-    "@types/ffi-napi": "^4.0.7"
+    "@types/ffi-napi": "^4.0.7",
+    "@types/node": "17"
   }
 }
