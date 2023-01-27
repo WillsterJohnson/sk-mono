@@ -34,7 +34,7 @@ jobs:
         run: cargo build --release --verbose
 
       - name: Move and rename binaries
-        run: bash ./dist.sh
+        run: bash ./dist.sh ${{ steps.tag-name.outputs.tag_name }}
 
       - name: Add files to release
         uses: softprops/action-gh-release@v1
