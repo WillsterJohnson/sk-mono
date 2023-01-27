@@ -13,15 +13,18 @@ if (name !== "sk-mono") main();
 async function main() {
   await checkForUpdate();
 
-  const fRoot = url.fileURLToPath(path.dirname(import.meta.url));
-  const fTar = path.join(fRoot, "/tar/sk-mono.tar.gz");
+  const fRoot = path.join(
+    url.fileURLToPath(path.dirname(import.meta.url)),
+    "..",
+  );
+  const fTar = path.join(fRoot, "tar", "sk-mono.tar.gz");
   fs.mkdirSync(path.join(fRoot, "tar"), { recursive: true });
 
   const response = await getTar();
 
   writeTarball(fTar, response.body);
 
-  tar.extract({ cwd: fRoot + "/tar", file: fTar });
+  tar.extract({ cwd: path.join(fRoot, "tar"), file: fTar });
 
   const files = fs.readdirSync(path.join(fRoot, "tar"));
 

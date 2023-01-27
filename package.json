@@ -10,7 +10,8 @@
     "skmono": "./sk-mono",
     "skm": "./sk-mono"
   },
-  "main": "lib.js",
+  "main": "scripts/lib.js",
+  "types": "scripts/lib.d.ts",
   "scripts": {
     "preinstall": "NODE_NO_WARNINGS=1 node install.js --experimental-fetch"
   },
