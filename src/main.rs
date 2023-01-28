@@ -5,44 +5,82 @@
  */
 
 mod commands;
+mod debugger;
 
-use clap::Parser;
+use clap::{ArgAction::SetTrue, Parser};
 use commands::Commands;
+use debugger::Debugger;
 
 #[derive(Parser)]
 #[command(author, version, about, long_about = None)]
-pub struct SkMono {
+struct CliArgs {
     /// Show debug info
-    #[arg(short, long, hide = true, action = clap::ArgAction::SetTrue)]
+    #[arg(short, long, hide = true, action = SetTrue)]
     debug: bool,
-
+    /// The subcommand to run
     #[command(subcommand)]
     command: Option<Commands>,
 }
 
+pub struct SkMono {
+    args: CliArgs,
+    /// Debugger instance
+    debugger: Option<Debugger>,
+}
+
 impl SkMono {
-    fn debug(&self, msg: &str) {
-        if self.debug {
-            println!("\x1b[33m[\x1b[35mSKMONO\x1b[33m] \x1b[36mDEBUG\x1b[33m:\x1b[0m {msg}");
+    /// Create a new SkMono instance by parsing CLI args
+    fn new() -> SkMono {
+        let mut cli = SkMono {
+            args: CliArgs::parse(),
+            debugger: None,
+        };
+        cli.debugger = Debugger::new(cli.args.debug);
+        return cli;
+    }
+
+    /// Print a message to the console if debug mode is enabled
+    fn debug(&self, msg: &str, severity: usize) {
+        match &self.debugger {
+            Some(debugger) => debugger.log(msg, severity),
+            None => (),
         }
     }
+
+    /// Print help for a subcommand
+    /// Prints help for the main command if no subcommand is given
     fn help(&self, subcommand: &str) {
         if subcommand.len() > 0 {
-            SkMono::parse_from(&["skmono", subcommand, "--help"]);
+            CliArgs::parse_from(&["skmono", subcommand, "--help"]);
         } else {
-            SkMono::parse_from(&["skmono", "--help"]);
+            CliArgs::parse_from(&["skmono", "--help"]);
         }
     }
 }
 
 fn main() {
-    let cli = SkMono::parse();
-    cli.debug("Debug mode enabled.");
-    match &cli.command {
-        Some(cmd) => cmd.run(&cli),
+    // TODO: remove in 1.0
+    println!(
+        "{} {} {}",
+        "\x1b[33m(\x1b[31m!\x1b[33m)",
+        "\x1b[36mSkMono is in early alpha,",
+        "run with --debug if you encounter any issues\x1b[0m"
+    );
+
+    let cli = SkMono::new();
+
+    match &cli.args.command {
+        Some(cmd) => {
+            cli.debug(
+                format!("Running command: {:?}", &cli.args.command).as_str(),
+                0,
+            );
+            match cmd {
+                Commands::Test(ref test) => test.command(&cli),
+            }
+        }
         None => {
-            cli.debug("No command given, printing help.");
-            println!("\x1b[34mSkMono is in early alpha, run with --debug if you encounter any issues\x1b[0m");
+            cli.debug("No command given, printing help.", 1);
             cli.help("");
         }
     };

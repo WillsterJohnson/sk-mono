@@ -3,11 +3,14 @@
  *
  * See license: <https://github.com/WillsterJohnson/sk-mono/blob/main/LICENSE.txt>
  */
-use clap::Args;
-use std::{thread, time};
 
 use crate::SkMono;
+use clap::Args;
+use std::thread::sleep;
+use std::time::Duration;
 
+/// SkMono isn't ready yet, but this command is supplied so you can explore
+/// the CLI
 #[derive(Debug, Args)]
 pub struct Test {
     /// Does something when set, run it and see!
@@ -16,13 +19,13 @@ pub struct Test {
 }
 
 impl Test {
-    pub fn run(&self, cli: &SkMono) {
-        cli.debug("test");
+    pub fn command(&self, cli: &SkMono) {
+        cli.debug("test", 0);
         if self.do_something {
             println!("Doing something...");
-            thread::sleep(time::Duration::from_secs(3));
+            sleep(Duration::from_secs(3));
             println!("Done!");
-            thread::sleep(time::Duration::from_secs(1));
+            sleep(Duration::from_secs(1));
             println!("Successfully created an mp4 of this command being run.");
             println!("View: \x1b[36mhttps://www.youtube.com/watch?v=o-YBDTqX_ZU\x1b[0m");
         } else {
