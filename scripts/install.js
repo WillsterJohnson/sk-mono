@@ -1,17 +1,12 @@
 import fs from "node:fs";
 import os from "node:os";
 import path from "node:path";
-import url from "node:url";
 import tar from "tar";
-import { checkForUpdate, currentTag } from "./checkUpdate.js";
-main();
-async function main() {
+import { checkForUpdate, currentTag, fRoot } from "./checkUpdate.js";
+if (process.argv[1].includes("install.js")) install();
+export async function install() {
   await checkForUpdate();
 
-  const fRoot = path.join(
-    url.fileURLToPath(path.dirname(import.meta.url)),
-    "..",
-  );
   fs.mkdirSync(path.join(fRoot, "tar"), { recursive: true });
   const fTar = path.join(fRoot, "tar", "bundle.tar.gz");
 
@@ -19,28 +14,42 @@ async function main() {
 
   await writeTarball(fTar, response.body);
 
-  await tar.extract({ cwd: path.join(fRoot, "tar"), file: fTar });
+  const tarDir = path.join(fRoot, "tar");
 
-  const files = fs.readdirSync(path.join(fRoot, "tar"));
+  const error = await tryThreeTimes(async () => {
+    await tar.extract({ cwd: tarDir, file: fTar });
 
-  normaliseFiles(files, "sk-mono", fRoot);
-  normaliseFiles(files, "lib", fRoot);
+    const files = fs.readdirSync(tarDir);
 
-  fs.rmSync(path.join(fRoot, "tar"), { recursive: true });
+    normaliseFiles(files, "sk-mono", fRoot);
+    normaliseFiles(files, "lib", fRoot);
+  });
+
+  fs.rmSync(tarDir, { recursive: true });
+  if (error)
+    throw new Error(
+      "Failed to install SkMono (typically, retrying will install SkMono successfully)",
+      // @ts-expect-error
+      { cause: error },
+    );
+  console.log("SkMono installed successfully!");
 }
+/**
+ *
+ * @param {string[]} files
+ * @param {string} name
+ * @param {string} root
+ */
 function normaliseFiles(files, name, root) {
   const fLib = files.find((file) => file.startsWith(name));
-  console.log(fLib);
   fs.cpSync(path.join(root, "tar", fLib), path.join(root, name));
   fs.chmodSync(path.join(root, name), 0o755);
 }
 async function writeTarball(target, source) {
   const fsWrite = fs.createWriteStream(target);
-  const nodeWrite = new WritableStream({
-    write: (chunk) => void fsWrite.write(chunk),
-    close: () => void fsWrite.end(),
-  });
+  const nodeWrite = new WritableStream({ write: (c) => void fsWrite.write(c) });
   await source.pipeTo(nodeWrite);
+  fsWrite.end();
 }
 async function getTar() {
   const platform = getPlatform();
@@ -65,4 +74,24 @@ function getPlatform() {
       "sk-mono does not currently support Darwin (MacOS). Sorry, we're working on it!",
     );
   else throw new Error(`Unsupported platform: ${type} ${arch}`);
+}
+/**
+ * @param {() => Promise<void> | void} cb
+ * @param {number} maxFails
+ * @returns {Promise<Error | void>}
+ */
+async function tryThreeTimes(cb, maxFails = 3) {
+  try {
+    await cb();
+  } catch (e) {
+    if (--maxFails === 0) {
+      if (e instanceof Error) return e;
+      else return new Error(e);
+    } else {
+      console.log(
+        `Failed to install SkMono. Retrying... (${maxFails} attempts left, error: "${e.message}")`,
+      );
+    }
+    return await tryThreeTimes(cb, maxFails);
+  }
 }

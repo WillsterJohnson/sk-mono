@@ -1,6 +1,11 @@
 // TODO: migrate to /src/lib.rs and call via FFI
+import path from "node:path";
+import url from "node:url";
 import pkg from "../package.json" assert { type: "json" };
-
+export const fRoot = path.join(
+  url.fileURLToPath(path.dirname(import.meta.url)),
+  "..",
+);
 export const { version: currentTag } = pkg;
 export async function checkForUpdate() {
   const response = await fetch(
