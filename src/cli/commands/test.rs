@@ -4,7 +4,7 @@
  * See license: <https://github.com/WillsterJohnson/sk-mono/blob/main/LICENSE.txt>
  */
 
-use crate::SKMono;
+use crate::cli::SKMono;
 use clap::Args;
 use std::thread::sleep;
 use std::time::Duration;

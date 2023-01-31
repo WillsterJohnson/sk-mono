@@ -18,10 +18,6 @@ impl Debugger {
             severity_glyphs: vec!["\x1b[32m(*)", "\x1b[33m(?)", "\x1b[31m(!)"],
         };
         debugger.log("Running in debug mode because --debug was set to true", 0);
-        debugger.log("severity=0; info", 0);
-        debugger.log("severity=1; warning", 1);
-        debugger.log("severity=2; error", 2);
-        debugger.log("### LOGS ###", 0);
         return Some(debugger);
     }
     /// Print a message to the console if debug mode is enabled
