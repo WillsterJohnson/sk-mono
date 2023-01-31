@@ -13,7 +13,8 @@
   "main": "scripts/lib.js",
   "types": "scripts/lib.d.ts",
   "scripts": {
-    "preinstall": "NODE_NO_WARNINGS=1 node scripts/install.js --experimental-fetch"
+    "preinstall": "NODE_NO_WARNINGS=1 node scripts/install.js --experimental-fetch",
+    "dev": "bash dev.sh"
   },
   "engines": {
     "": "really >=18, but fetch experimental is available in 17",

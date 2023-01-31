@@ -7,9 +7,7 @@ import { install } from "./install.js";
 run();
 async function run() {
   const binPath = path.join(fRoot, "sk-mono");
-  const bothExist =
-    fs.existsSync(binPath) && fs.existsSync(path.join(fRoot, "lib"));
-  if (bothExist) await checkForUpdate();
+  if (fs.existsSync(binPath)) await checkForUpdate();
   else await install();
   child.spawn(binPath, process.argv.slice(2), {
     stdio: "inherit",

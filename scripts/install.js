@@ -21,8 +21,14 @@ export async function install() {
 
     const files = fs.readdirSync(tarDir);
 
-    normaliseFiles(files, "sk-mono", fRoot);
-    normaliseFiles(files, "lib", fRoot);
+    const fBin = files.find((file) => file.startsWith("sk-mono"));
+    fs.cpSync(path.join(tarDir, fBin), path.join(fRoot, "sk-mono"));
+    fs.chmodSync(path.join(fRoot, "sk-mono"), 0o755);
+
+    const fLib = files.find((file) => file.startsWith("lib"));
+    const osLibFile = path.join(fRoot, "lib." + fLib.split(".").slice(-1)[0]);
+    fs.cpSync(path.join(tarDir, fLib), osLibFile);
+    fs.chmodSync(osLibFile, 0o755);
   });
 
   fs.rmSync(tarDir, { recursive: true });
@@ -33,17 +39,6 @@ export async function install() {
       { cause: error },
     );
   console.log("SKMono installed successfully!");
-}
-/**
- *
- * @param {string[]} files
- * @param {string} name
- * @param {string} root
- */
-function normaliseFiles(files, name, root) {
-  const fLib = files.find((file) => file.startsWith(name));
-  fs.cpSync(path.join(root, "tar", fLib), path.join(root, name));
-  fs.chmodSync(path.join(root, name), 0o755);
 }
 async function writeTarball(target, source) {
   const fsWrite = fs.createWriteStream(target);
