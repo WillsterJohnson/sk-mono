@@ -6,9 +6,9 @@
   "license": "GPL-3.0",
   "type": "module",
   "bin": {
-    "sk-mono": "./sk-mono",
-    "skmono": "./sk-mono",
-    "skm": "./sk-mono"
+    "sk-mono": "./scripts/run.js",
+    "skmono": "./scripts/run.js",
+    "skm": "./scripts/run.js"
   },
   "main": "scripts/lib.js",
   "types": "scripts/lib.d.ts",
