@@ -17,6 +17,7 @@ struct CliArgs {
     /// Show debug info
     #[arg(short, long, hide = true, action = SetTrue)]
     debug: bool,
+
     /// The subcommand to run
     #[command(subcommand)]
     command: Option<Commands>,
@@ -24,6 +25,7 @@ struct CliArgs {
 
 pub struct SKMono {
     args: CliArgs,
+
     /// Debugger instance
     debugger: Option<Debugger>,
 }
@@ -31,20 +33,17 @@ pub struct SKMono {
 impl SKMono {
     /// Run SKMono
     pub fn run() {
-        let mut cli = SKMono {
-            args: CliArgs::parse(),
-            debugger: None,
-        };
-        cli.debugger = Debugger::new(cli.args.debug);
-
+        let cli = SKMono::init();
         match &cli.args.command {
             Some(cmd) => {
                 cli.debug(
                     format!("Running command: {:?}", &cli.args.command).as_str(),
                     0,
                 );
+                // TODO: implicit awareness of `cmd.command`?
                 match cmd {
                     Commands::Test(ref test) => test.command(&cli),
+                    Commands::Init(ref init) => init.command(&cli),
                 }
             }
             None => {
@@ -52,6 +51,18 @@ impl SKMono {
                 cli.help("");
             }
         };
+    }
+
+    /// initialize SKMono
+    fn init() -> SKMono {
+        let mut cli = SKMono {
+            args: CliArgs::parse(),
+            debugger: None,
+        };
+        if cli.args.debug {
+            cli.debugger = Debugger::new(cli.args.debug);
+        }
+        return cli;
     }
 
     /// Print a message to the console if debug mode is enabled

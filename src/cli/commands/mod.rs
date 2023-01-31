@@ -4,12 +4,14 @@
  * See license: <https://github.com/WillsterJohnson/sk-mono/blob/main/LICENSE.txt>
  */
 
-pub mod test;
+mod init;
+mod test;
 
-use self::test::Test;
+use self::{init::Init, test::Test};
 use clap::Subcommand;
 
 #[derive(Debug, Subcommand)]
 pub enum Commands {
     Test(Test),
+    Init(Init),
 }

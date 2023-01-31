@@ -10,16 +10,17 @@ pub struct Debugger {
 
 impl Debugger {
     /// Create a new Debug instance
-    pub fn new(debug: bool) -> Option<Debugger> {
-        if !debug {
-            return None;
-        }
+    pub fn new() -> Option<Debugger> {
         let debugger = Debugger {
             severity_glyphs: vec!["\x1b[32m(*)", "\x1b[33m(?)", "\x1b[31m(!)"],
         };
-        debugger.log("Running in debug mode because --debug was set to true", 0);
+        debugger.log(
+            "Running in debug mode because `--debug` was set to `true`",
+            0,
+        );
         return Some(debugger);
     }
+
     /// Print a message to the console if debug mode is enabled
     pub fn log(&self, msg: &str, mut severity: usize) {
         if severity > 2 {

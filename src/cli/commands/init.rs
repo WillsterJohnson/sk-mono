@@ -6,16 +6,13 @@
 
 use crate::cli::SKMono;
 use clap::Args;
-use std::thread::sleep;
-use std::time::Duration;
 
-/// SKMono isn't ready yet, but this command is supplied so you can explore
-/// the CLI
+/// Initialize a SvelteKit Monorepo
 #[derive(Debug, Args)]
 pub struct Init {
-    /// Does something when set, run it and see!
+    /// none
     #[arg(short, long)]
-    do_something: bool,
+    none: bool,
 }
 
 impl Init {
