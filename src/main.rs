@@ -22,16 +22,16 @@ struct CliArgs {
     command: Option<Commands>,
 }
 
-pub struct SkMono {
+pub struct SKMono {
     args: CliArgs,
     /// Debugger instance
     debugger: Option<Debugger>,
 }
 
-impl SkMono {
-    /// Create a new SkMono instance by parsing CLI args
-    fn new() -> SkMono {
-        let mut cli = SkMono {
+impl SKMono {
+    /// Create a new SKMono instance by parsing CLI args
+    fn new() -> SKMono {
+        let mut cli = SKMono {
             args: CliArgs::parse(),
             debugger: None,
         };
@@ -63,11 +63,11 @@ fn main() {
     println!(
         "{} {} {}",
         "\x1b[33m(\x1b[31m!\x1b[33m)",
-        "\x1b[36mSkMono is in early alpha,",
+        "\x1b[36mSKMono is in early alpha,",
         "run with --debug if you encounter any issues\x1b[0m"
     );
 
-    let cli = SkMono::new();
+    let cli = SKMono::new();
 
     match &cli.args.command {
         Some(cmd) => {

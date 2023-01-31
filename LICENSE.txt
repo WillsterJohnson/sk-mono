@@ -1,4 +1,4 @@
-sk-mono - SvelteKit monorepos made easy
+SKMono - SvelteKit monorepos made easy
 Copyright (C) 2023-Present Will 'Willster' Johnson
 
 This program is free software: you can redistribute it and/or modify

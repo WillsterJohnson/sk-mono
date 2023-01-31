@@ -28,11 +28,11 @@ export async function install() {
   fs.rmSync(tarDir, { recursive: true });
   if (error)
     throw new Error(
-      "Failed to install SkMono (typically, retrying will install SkMono successfully)",
+      "Failed to install SKMono (typically, retrying will install SKMono successfully)",
       // @ts-expect-error
       { cause: error },
     );
-  console.log("SkMono installed successfully!");
+  console.log("SKMono installed successfully!");
 }
 /**
  *
@@ -89,7 +89,7 @@ async function tryThreeTimes(cb, maxFails = 3) {
       else return new Error(e);
     } else {
       console.log(
-        `Failed to install SkMono. Retrying... (${maxFails} attempts left, error: "${e.message}")`,
+        `Failed to install SKMono. Retrying... (${maxFails} attempts left, error: "${e.message}")`,
       );
     }
     return await tryThreeTimes(cb, maxFails);

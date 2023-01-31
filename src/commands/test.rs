@@ -4,12 +4,12 @@
  * See license: <https://github.com/WillsterJohnson/sk-mono/blob/main/LICENSE.txt>
  */
 
-use crate::SkMono;
+use crate::SKMono;
 use clap::Args;
 use std::thread::sleep;
 use std::time::Duration;
 
-/// SkMono isn't ready yet, but this command is supplied so you can explore
+/// SKMono isn't ready yet, but this command is supplied so you can explore
 /// the CLI
 #[derive(Debug, Args)]
 pub struct Test {
@@ -19,7 +19,7 @@ pub struct Test {
 }
 
 impl Test {
-    pub fn command(&self, cli: &SkMono) {
+    pub fn command(&self, cli: &SKMono) {
         cli.debug("test", 0);
         if self.do_something {
             println!("Doing something...");
