@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "rootDir": "src",
+    "outDir": "dist",
+    "module": "Node16",
+    "target": "ESNext",
+    "strict": true,
+    "skipLibCheck": true,
+    "declaration": true
+  },
+  "include": ["src/**/*"]
+}

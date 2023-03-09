@@ -1,8 +1,6 @@
 /node_modules
-/target
-/tar
+/dist
 .DS_Store
 *.log
 *.log*
 sk-mono
-lib.*

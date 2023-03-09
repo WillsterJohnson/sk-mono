@@ -22,13 +22,7 @@ SvelteKit monorepos made easy.
 
 ## What is this?
 
-Currently it's *nothing*!
-
-SKMono is going to be a fully featured command line utility for making,
-managing, running, building, and deploying SvelteKit libraries and applications
-from monorepos, using Rust for lightning fast execution times.
-
-Work in progress, check back later.
+SKMono is a commandline utility for easily managing SvelteKit monorepos.
 
 ## Installation
 
@@ -58,9 +52,6 @@ skm --version
 ```
 
 ## Contributing
-
-**Important: SKMono is written almost entirely in Rust. Aside from a short
-install script, there is very little JavaScript here.**
 
 Currently SKMono is not currently accepting code contributions.
 

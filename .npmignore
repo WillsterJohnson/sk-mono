@@ -1,6 +1,5 @@
-*
-!CHANGELOG.md
-!scripts/checkUpdate.js
-!scripts/install.js
-!scripts/lib.js
-!scripts/lib.d.ts
+/**/*
+/*.*
+!dist/**/*
+dist/skmono.d.ts
+dist/skmono/**/*.d.ts
