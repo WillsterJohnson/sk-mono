@@ -28,6 +28,7 @@ jobs:
 
       - name: Publish to npm
         run: |
+          npm install
           npm version $tag_name --no-git-tag-version
           npm publish
         env:
