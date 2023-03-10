@@ -152,7 +152,7 @@ export class SkMono {
     );
     writeIfInPaths(
       paths.prettierignore,
-      `.DS_Store\nnode_modules\n/build\n/.svelte-kit\n/package\n.env\n.env.*\n!.env.example\n# Ignore files for PNPM, NPM and YARN\npnpm-lock.yaml\npackage-lock.json\nyarn.lock\n`,
+      `.DS_Store\nnode_modules\n/build\n**/.svelte-kit\n/package\n.env\n.env.*\n!.env.example\n# Ignore files for PNPM, NPM and YARN\npnpm-lock.yaml\npackage-lock.json\nyarn.lock\n`,
     );
     writeIfInPaths(
       paths.errorhtml,
@@ -228,7 +228,7 @@ export class SkMono {
             "./global/**/*.ts",
             "./params/**/*.ts",
           ],
-          exclude: ["./node_modules/**", "./.svelte-kit/[!ambient.d.ts]**", "./service-worker.ts"],
+          exclude: ["./node_modules/**", "./.svelte-kit/[!ambient.d.ts]**", "./worker.ts"],
         },
         null,
         2,
@@ -378,17 +378,16 @@ export class SkMono {
             "./routes/**/*.ts",
             "./tests/**/*.ts",
           ],
-          exclude: [
-            "../../node_modules/**",
-            "./.svelte-kit/[!ambient.d.ts]**",
-            "./service-worker.ts",
-          ],
+          exclude: ["../../node_modules/**", "./.svelte-kit/[!ambient.d.ts]**", "./worker.ts"],
         },
         null,
         2,
       ),
     );
-    fs.writeFileSync(path.join(addDir, "worker.ts"), `// service worker\n`);
+    fs.writeFileSync(
+      path.join(addDir, "worker.ts"),
+      `/// <reference types="@sveltejs/kit" />\n/// <reference no-default-lib="true"/>\n/// <reference lib="esnext" />\n/// <reference lib="webworker" />\n\nconst sw = self as unknown as ServiceWorkerGlobalScope;\n\nimport { build, files, version, base, prerendered } from '$service-worker';\nimport { workerCache } from "sk-mono";\n\nworkerCache(sw, version, [...files, ...build]);`,
+    );
 
     fs.mkdirSync(path.join(addDir, "assets"));
     fs.mkdirSync(path.join(addDir, "lib"));
