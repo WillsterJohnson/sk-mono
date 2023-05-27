@@ -1,3 +1,7 @@
+# `svelte-package` has recieved updates which make `sk-mono` redundant
+
+## Please do not use `sk-mono` for any projects
+
 # SKMono
 
 ![License: GPL-3.0](https://img.shields.io/badge/License-GPL--3.0-ff3e00?style=flat-square)
